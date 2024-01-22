@@ -103,17 +103,19 @@ sillyis=[
     "maybe have dementia if he said"
     ]
 
+async def update_presence():
+
+    idiots=0
+    for every in bot.guilds:
+        idiots += every.member_count
+    await bot.change_presence(status=disnake.Status.online,
+                              activity=disnake.Activity(type=disnake.ActivityType.watching,
+                              name=f"for {idiots} idiots on {len(bot.guilds)} servers"))
+
 @bot.event
 async def on_ready():
     print(f"@{bot.user} is now online")
-
-    print("setting presence")
-    idiots=0
-    for every in bot.guilds:
-        idiots+=every.member_count
-        print(f"{idiots} people... ({every.member_count} people from {every.name})")
-    await bot.change_presence(status=disnake.Status.online,activity=disnake.Game(f"with {idiots} idiots on {len(bot.guilds)} servers"))
-    print("presence changed")
+    await update_presence()
     
     while True:
         print("\n")
@@ -351,8 +353,7 @@ async def on_message(message):
     #        await message.channel.send(f"{message.author} {choice(sillyis)} `{message.content}`")
     #    if any(i in bread for i in ["bredbed","bredgodnt"]):
     #        await message.add_reaction(bot.get_emoji(1152506629879758878)) #thubm_up
-    #else:
-    #    if balls=="битбокс баттл с аботмином": await message.channel.send("АЛИСА ПОМОГИ ЧТО ЭТОТ ДЕБИЛ ХОЧЕТ ОТ МЕНЯ")
+    elif balls=="битбокс баттл с аботмином": await message.channel.send("АЛИСА ПОМОГИ ЧТО ЭТОТ ДЕБИЛ ХОЧЕТ ОТ МЕНЯ")
 
     # replies
     if "`[redacted]`" in balls:
@@ -365,6 +366,8 @@ async def on_message(message):
         await message.channel.send("ANGITRAV"+"🍎"*randint(22,42))
     if message.webhook_id==None and ":antaegeav:" in balls and "ябколко" in balls:
         await message.channel.send("ANTIRAGRABA"+"🍏"*randint(22,42))
+    if message.webhook_id==None and ":anitgrva:" in balls and "ялобобко" in balls:
+        await message.channel.send("AGNINGRATA"+"🍍"*randint(22,42))
     if "https://tenor.com/view/who-asked-did-i-ask-i-asked-meme-get-real-gif-21114957"==balls:
         await message.channel.send("real")
     #if "<@979669953865216000>" in balls: #@thebreadcell
@@ -401,6 +404,8 @@ async def on_message(message):
         await message.reply("test success")
     if "define bitches"==balls:
         await message.channel.send("something you dont have")
+    if balls.isdigit() and 8<=len(balls)<=100:
+        await message.channel.send(f"{balls} is a wuggy numbers 😂😂😂😂😂")
 
 
     # random reactions
@@ -504,6 +509,26 @@ async def on_message(message):
         if message.content.lower() in alphabet:
             index=alphabet.find(balls)
             await message.add_reaction("🇦🇧🇨🇩🇪🇫🇬🇭🇮🇯🇰🇱🇲🇳🇴🇵🇶🇷🇸🇹🇺🇻🇼🇽🇾🇿"[index])
+        
+    #if balls == "hey ammeter start flowmeter":
+    #    if bot.get_guild(1042064947867287643).get_member(1184192159944028200).status == disnake.Status.offline:
+    #        os.startfile("C:\\Users\\User\\Documents\\folder without name\\discord bort\\flowmeter\\main.py")
+    #        await message.channel.send("<:thubm_up:1096323451985334363>")
+    #    else:
+    #        await message.channel.send("flowmeter is already online you dum dujm")
+        
+    #elif balls == "hey ammeter start ctqa bto":
+    #    if bot.get_guild(1042064947867287643).get_member(1174011590559928330).status == disnake.Status.offline:
+    #        os.startfile("C:\\Users\\User\\Documents\\folder without name\\discord bort\\ctqa bto\\main.py")
+    #        await message.channel.send("<:thubm_up:1096323451985334363>")
+    #    else:
+    #        await message.channel.send("ctqa bto is already online you silly")
+        
+    if balls == "hey ammeter start ammeter":
+        await message.add_reaction(bot.get_emoji(1196526737048227850))
+
+    elif "start ammeter" in balls:
+        await message.add_reaction(bot.get_emoji(1145359652691923085))
 
 
     # if theres 3 "n't" messages bot kindly asks you to shut the fu
@@ -514,6 +539,7 @@ async def on_message(message):
         else: counter=0
     if counter>2:
         await message.channel.send("stfu")
+
 
 # :typing::arrow_left::typing:
 @bot.event
@@ -554,14 +580,20 @@ async def ping(ctx):
         await ctx.send(f"ammeter is melting tema5002's laptop with {hh}ms ping")
     if hh>=500:
         await ctx.send(embed = giveach("AMMETER HAS DEMENTIA", ctx.author))
+    await update_presence()
 
 @bot.slash_command(description="talk as a bot")
 async def say(
-    ctx, text: str = "", reply_to: int = None, file: disnake.Attachment = None):
+    ctx, text: str = "", reply_to: str = None, file: disnake.Attachment = None):
 
     if not(ctx.author.id==tema5002 or ctx.author.id==ctx.guild.owner_id):
         await ctx.send("naaah bro this arent yours 💀💀💀💀", ephemeral=True)
         return
+
+    if not reply_to.isdigit() and reply_to!=None:
+        await ctx.send("enter a digit for `reply_to`.", ephemeral=True)
+        return
+    reply_to = int(reply_to)
 
     msg = reply_to or ctx.channel
     try:
@@ -593,8 +625,11 @@ async def file(ctx,file: disnake.Attachment):
 @bot.slash_command(name="info",description="info")
 async def info(ctx):
     embed=disnake.Embed(title="Ammeter",color=0x00FFFF,description=
-        f"very bad bot made by tema5002\n\nthanks to \n**slinx92**\n**thebreadcell** (dont ask)\n\n"+
-        "join [mileankso mods](https://discord.gg/WCTzD3YQEk) or i will do uhhhh idk")
+        "very bad bot made by tema5002\n\nthanks to \n**slinx92**\n**thebreadcell** (dont ask)\n\n"+
+        "[proglet software](https://discord.gg/gpRkkYjpGR): used for announcements\n"+
+        "[a silly server](https://discord.gg/rckcGzxKBR): probably official ammeter server\n"+
+        "[my honest reaction](https://discord.gg/SRM7CrSKRT): 99% of all emojis\n"+
+        "[Slinx's attic](https://discord.gg/9acZNWYSfN): i test ammeter mostly there")
     await ctx.send(embed=embed)
 
 @bot.slash_command(name="stats",description="stats")
@@ -824,17 +859,17 @@ async def send_file(ctx, filename: str):
         await ctx.send(f"file `{filename}` doesnt exist", ephemeral=True)
     else:
         now = datetime.datetime.now()
-        last_used = save_file_cooldowns.get(ctx.author.id)
+        last_used = send_file_cooldowns.get(ctx.author.id)
 
         if last_used is not None:
             # time since last use
             when_used = (now - last_used).total_seconds()
 
             if when_used < 20:
-                await ctx.send(f"this command is on cooldown <:typing:1133071627370897580>\ntry again in {round(5 - when_used)} seconds", ephemeral=True)
+                await ctx.send(f"this command is on cooldown <:typing:1133071627370897580>\ntry again in {round(20 - when_used)} seconds", ephemeral=True)
                 return
 
-        save_file_cooldowns[ctx.author.id] = now
+        send_file_cooldowns[ctx.author.id] = now
         await ctx.send(filename, file=disnake.File(get_file_path("shitpost", filename)))
 
 
